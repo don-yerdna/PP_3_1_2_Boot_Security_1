@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список пользователей</title>
+    <style>table th, table td {
+        padding: 5px;
+    }</style>
+</head>
+<body>
+<div id="table-users">
+    <h3>Список пользователей</h3>
+
+
+    <table border="1">
+        <tr>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>E-mail</th>
+            <th>Возраст</th>
+            <th></th>
+        </tr>
+
+        <tr th:each="user :${users}">
+            <td th:utext="${user.getFirstName()}">VALUE</td>
+            <td th:utext="${user.getLastName()}">VALUE</td>
+            <td th:utext="${user.getEmail()}">VALUE</td>
+            <td th:utext="${user.getAge()}">VALUE</td>
+            <td>
+                <input th:attr="onclick='window.location.href = \'' + @{/edit?id={id}(id=${user.getId()})} + '\''" type="button" value="Редактировать" >
+                <input th:attr="onclick='window.location.href = \'' + @{/remove?id={id}(id=${user.getId()})} + '\''" type="button" value="Удалить" >
+            </td>
+        </tr>
+
+    </table>
+   <br>
+    <input type="button" value="Добавить" onclick="window.location.href='/add'">
+</div>
+</body>
+</html>
