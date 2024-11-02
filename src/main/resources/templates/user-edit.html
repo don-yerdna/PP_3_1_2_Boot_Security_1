@@ -6,24 +6,25 @@
 </head>
 <body>
 <div id="user-form">
+    <h3>Для модификации, введите новые значения и нажмите кнопку "Применить"</h3>
     <form action="save" modelAttribute="user">
         <div class="user-label"><label>Username</label></div>
-        <div><input class="create-user-input" name="username" disabled type="text" th:value="${user.getUsername()}"></div>
+        <div><input class="create-user-input" name="username" type="text" th:value="${user.getUsername()}"></div>
         <br>
         <div class="user-label"><label>Password</label></div>
-        <div><input class="create-user-input" name="password" disabled type="password" th:value="${user.getPassword()}"></div>
+        <div><input class="create-user-input" name="password" type="password" th:value="${user.getPassword()}"></div>
         <br>
         <div class="user-label"><label>Имя</label></div>
-        <div><input class="create-user-input" name="firstName" disabled type="text" th:value="${user.getFirstName()}"></div>
+        <div><input class="create-user-input" name="firstName" type="text" th:value="${user.getFirstName()}"></div>
         <br>
         <div class="user-label"><label>Фамилия</label></div>
-        <div><input class="create-user-input" name="lastName" disabled type="text" th:value="${user.getLastName()}"></div>
+        <div><input class="create-user-input" name="lastName" type="text" th:value="${user.getLastName()}"></div>
         <br>
         <div class="user-label"><label>E-mail</label></div>
-        <div><input class="create-user-input" name="email" disabled type="text" th:value="${user.getEmail()}"></div>
+        <div><input class="create-user-input" name="email" type="text" th:value="${user.getEmail()}"></div>
         <br>
         <div class="user-label"><label>Возраст</label></div>
-        <div><input class="create-user-input" name="age" disabled type="text" th:value="${user.getAge()}"></div>
+        <div><input class="create-user-input" name="age" type="text" th:value="${user.getAge()}"></div>
         <input name="id" type="hidden" th:value="${user.getId()}">
 
         <br>
