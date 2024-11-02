@@ -5,12 +5,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -24,10 +20,10 @@ public class AdminController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public String listUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
-        return "users";
+        return "admin";
     }
 
     @GetMapping("/add")
@@ -46,13 +42,6 @@ public class AdminController {
 
     @RequestMapping("/save")
     public String saveUser(@ModelAttribute("user") User user) {
-//        List<Role> roles = new ArrayList<>();
-//        Role role = new Role();
-//        role.setRole("ROLE_USER");
-//        roles.add(role);
-//        user.setRoles(roles);
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        System.out.println(user);
         if (user.getId() != 0) {
             userService.updateUser(user);
         } else {

@@ -25,8 +25,16 @@
         <br>
         <div class="user-label"><label>Возраст</label></div>
         <div><input class="create-user-input" name="age" type="text" th:value="${user.getAge()}"></div>
-        <input name="id" type="hidden" th:value="${user.getId()}">
+        <br>
+        <div class="user-label"><label>Роли</label></div>
+        <div>
+            <input type="checkbox" name="ROLE_ADMIN" value="Admin" checked />
+            <input type="checkbox" name="ROLE_USER" value="User"  />
+<!--            <input type="checkbox" name="ROLE_ADMIN" value="Admin" th:if="${#authorization.expr('hasRole(''ADMIN'')')}" th:text="checked" />-->
+<!--            <input type="checkbox" name="ROLE_USER" value="User" th:if="${#authorization.expr('hasRole(''USER'')')}" th:text="checked" />-->
+        </div>
 
+        <input name="id" type="hidden" th:value="${user.getId()}">
         <br>
 
         <input class="create-user-form-button" type="submit" value="Применить"/>
