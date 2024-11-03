@@ -24,7 +24,7 @@ public class UserServiceImp implements UserService {
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
-    public UserServiceImp(UserDao userDAO, RoleDao roleDao){
+    public UserServiceImp(UserDao userDAO, RoleDao roleDao) {
         this.userDAO = userDAO;
         this.roleDao = roleDao;
 
@@ -39,25 +39,24 @@ public class UserServiceImp implements UserService {
     @Transactional
     @Override
     public void updateUser(User user) {
+        if (!user.getPassword().equals("")) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        } else {
+            user.setPassword(userDAO.getUserById(user.getId()).getPassword());
+        }
         userDAO.updateUser(user);
     }
 
     @Transactional
     @Override
     public void addUser(User user) {
-        System.out.println(user);
-//        System.out.println(new BCryptPasswordEncoder(user.getPassword()));
         Set<Role> roles = new HashSet<>();
         Role role = new Role();
         role.setRole("ROLE_USER");
         role.setUser(user);
-//        user.getRoles().add(role);
-
         roles.add(role);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(roles);
-        System.out.println(user);
-//        System.out.println(roles);
         roleDao.addRole(role);
         userDAO.addUser(user);
     }
@@ -71,8 +70,52 @@ public class UserServiceImp implements UserService {
     @Transactional
     @Override
     public void removeUserById(Long id) {
+        User user = userDAO.getUserById(id);
+        Set<Role> roles = user.getRoles();
+        for (Role role : roles) {
+            roleDao.deleteRole(role.getRole(), id);
+        }
         userDAO.removeUserById(id);
     }
+
+    @Transactional
+    @Override
+    public void removeRoleByUserId(Long id, String userRole) {
+        User user = userDAO.getUserById(id);
+        Set<Role> roles = user.getRoles();
+        for (Role role : roles) {
+            if (role.getRole().equals(userRole)) {
+                roles.remove(role);
+                roleDao.deleteRole(role.getRole(), id);
+                break;
+            }
+        }
+        user.setRoles(roles);
+
+        userDAO.updateUser(user);
+
+
+    }
+
+    @Transactional
+    @Override
+    public void addRoleByUserId(Long id, String userRole) {
+        User user = userDAO.getUserById(id);
+        Set<Role> roles = user.getRoles();
+        for (Role role : roles) {
+            if (role.getRole().equals(userRole)) {
+                return;
+            }
+        }
+        Role role = new Role();
+        role.setRole(userRole);
+        role.setUser(user);
+        roles.add(role);
+        user.setRoles(roles);
+        roleDao.addRole(role);
+        userDAO.updateUser(user);
+    }
+
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -84,15 +127,4 @@ public class UserServiceImp implements UserService {
         throw new UsernameNotFoundException("Username not found");
     }
 
-
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        User user = userDAO.findUserByUsername(username);
-////        System.out.println(user);
-//        if(user!=null) {
-//            return user;
-//        } else {
-//            throw new UsernameNotFoundException("User not found");
-//        }
-//    }
 }

@@ -6,18 +6,22 @@
 </head>
 <body>
 <div id="user-form">
-    <form action="save" modelAttribute="user">
+    <form>
         <div class="user-label"><label>Username</label></div>
-        <div><input class="create-user-input" name="username" disabled type="text" th:value="${user.getUsername()}"></div>
+        <div><input class="create-user-input" name="username" disabled type="text" th:value="${user.getUsername()}">
+        </div>
         <br>
         <div class="user-label"><label>Password</label></div>
-        <div><input class="create-user-input" name="password" disabled type="password" th:value="${user.getPassword()}"></div>
+        <div><input class="create-user-input" name="password" disabled type="password" th:value="${user.getPassword()}">
+        </div>
         <br>
         <div class="user-label"><label>Имя</label></div>
-        <div><input class="create-user-input" name="firstName" disabled type="text" th:value="${user.getFirstName()}"></div>
+        <div><input class="create-user-input" name="firstName" disabled type="text" th:value="${user.getFirstName()}">
+        </div>
         <br>
         <div class="user-label"><label>Фамилия</label></div>
-        <div><input class="create-user-input" name="lastName" disabled type="text" th:value="${user.getLastName()}"></div>
+        <div><input class="create-user-input" name="lastName" disabled type="text" th:value="${user.getLastName()}">
+        </div>
         <br>
         <div class="user-label"><label>E-mail</label></div>
         <div><input class="create-user-input" name="email" disabled type="text" th:value="${user.getEmail()}"></div>
@@ -29,7 +33,7 @@
 
         <br>
 
-        <input class="create-user-form-button" type="submit" value="Применить"/>
+        <input class="create-user-form-button" type="button" value="Назад" onclick="history.back();"/>
     </form>
 </div>
 </body>

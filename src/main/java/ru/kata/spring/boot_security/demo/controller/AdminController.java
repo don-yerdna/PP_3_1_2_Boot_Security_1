@@ -42,6 +42,7 @@ public class AdminController {
 
     @RequestMapping("/save")
     public String saveUser(@ModelAttribute("user") User user) {
+
         if (user.getId() != 0) {
             userService.updateUser(user);
         } else {
@@ -50,9 +51,41 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @PostMapping("/remove")
+    @GetMapping("/remove")
     public String removeUser(@RequestParam(value = "id", required = true) Long id) {
         userService.removeUserById(id);
         return "redirect:/admin";
+    }
+
+    @GetMapping("/role/removeAdminRole")
+    public String removeAdminRole(@RequestParam(value = "id", required = true) Long id, Model model) {
+        userService.removeRoleByUserId(id, "ROLE_ADMIN");
+        User user = userService.getUserById(id);
+        model.addAttribute("user", user);
+        return "user-edit";
+    }
+
+    @GetMapping("/role/removeUserRole")
+    public String removeUserRole(@RequestParam(value = "id", required = true) Long id, Model model) {
+        userService.removeRoleByUserId(id, "ROLE_USER");
+        User user = userService.getUserById(id);
+        model.addAttribute("user", user);
+        return "user-edit";
+    }
+
+    @GetMapping("/role/addAdminRole")
+    public String addAdminRole(@RequestParam(value = "id", required = true) Long id, Model model) {
+        userService.addRoleByUserId(id, "ROLE_ADMIN");
+        User user = userService.getUserById(id);
+        model.addAttribute("user", user);
+        return "user-edit";
+    }
+
+    @GetMapping("/role/addUserRole")
+    public String addUserRole(@RequestParam(value = "id", required = true) Long id, Model model) {
+        userService.addRoleByUserId(id, "ROLE_USER");
+        User user = userService.getUserById(id);
+        model.addAttribute("user", user);
+        return "user-edit";
     }
 }

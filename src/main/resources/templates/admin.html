@@ -37,6 +37,7 @@
             </td>
             <td>
                 <input th:attr="onclick='window.location.href = \'' + @{/admin/edit?id={id}(id=${user.getId()})} + '\''" type="button" value="Редактировать" >
+
                 <input th:attr="onclick='window.location.href = \'' + @{/admin/remove?id={id}(id=${user.getId()})} + '\''" type="button" value="Удалить" >
             </td>
         </tr>
@@ -44,6 +45,8 @@
     </table>
    <br>
     <input type="button" value="Добавить" onclick="window.location.href='/admin/add'">
+    <br>
+    <input type="button" value="Logout" onclick="window.location.href='/logout'">
 </div>
 </body>
 </html>
