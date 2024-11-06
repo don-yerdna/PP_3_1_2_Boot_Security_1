@@ -6,22 +6,22 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.dao.UserDao;
-import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.UserService;
+//import ru.kata.spring.boot_security.demo.dao.UserDao;
+import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 @Service
 public class UserServiceDetails implements UserDetailsService {
-    private final UserDao userDao;
+    private final UserRepository userRepository;
     @Autowired
-    public UserServiceDetails(UserDao userDao) {
-        this.userDao = userDao;
+    public UserServiceDetails(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDao.findUserByUsername(username);
+        User user = userRepository.findByUsername(username);
         System.out.println(user);
         if (user != null) {
             return user;

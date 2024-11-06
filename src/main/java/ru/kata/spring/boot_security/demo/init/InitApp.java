@@ -1,14 +1,10 @@
 package ru.kata.spring.boot_security.demo.init;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.dao.RoleDao;
-import ru.kata.spring.boot_security.demo.dao.UserDao;
-import ru.kata.spring.boot_security.demo.model.Role;
-import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.RoleService;
-import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.models.Role;
+import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.services.RoleService;
+import ru.kata.spring.boot_security.demo.services.UserService;
 
 import javax.annotation.PostConstruct;
 import java.util.Set;
@@ -74,7 +70,7 @@ public class InitApp {
 //        user2.setRoles(Set.of(roleUser, roleAdmin));
         userService.addUser(admin);
         userService.addUser(user);
-        userService.addUser(user1);
+//        userService.addUser(user1);
 //        userService.addUser(user2);
     }
 

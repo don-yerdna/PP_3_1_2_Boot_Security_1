@@ -1,67 +1,62 @@
-package ru.kata.spring.boot_security.demo.service;
+package ru.kata.spring.boot_security.demo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.dao.RoleDao;
-import ru.kata.spring.boot_security.demo.dao.UserDao;
-import ru.kata.spring.boot_security.demo.model.Role;
-import ru.kata.spring.boot_security.demo.model.User;
+//import ru.kata.spring.boot_security.demo.dao.UserDao;
+import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
+@Transactional(readOnly = true)
 public class UserServiceImp implements UserService {
 
-    private final UserDao userDao;
+    private final UserRepository userRepository ;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImp(UserDao userDao,  PasswordEncoder passwordEncoder) {
-        this.userDao = userDao;
+    public UserServiceImp(UserRepository userRepository,PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Transactional(readOnly = true)
+
     @Override
     public List<User> getAllUsers() {
-        return userDao.getAllUsers();
+        return userRepository.findAll();
     }
 
     @Transactional
     @Override
     public void updateUser(User user) {
-        if (!user.getPassword().equals("")) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        } else {
-            user.setPassword(userDao.getUserById(user.getId()).getPassword());
-        }
-        userDao.updateUser(user);
+//        if (!user.getPassword().equals("")) {
+//            user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        } else {
+//            user.setPassword(userRepository.findById(user.getId())
+//                    userDao.getUserById(user.getId()).getPassword());
+//        }
+        userRepository.save(user);
     }
 
     @Transactional
     @Override
     public void addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userDao.save(user);
+        userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public User getUserById(Long id) {
-        return userDao.getUserById(id);
+        return userRepository.findById(id).orElse(null);
     }
 
     @Transactional
     @Override
     public void removeUserById(Long id) {
-        userDao.removeUserById(id);
+        userRepository.deleteById(id);
     }
 
 //    @Transactional
