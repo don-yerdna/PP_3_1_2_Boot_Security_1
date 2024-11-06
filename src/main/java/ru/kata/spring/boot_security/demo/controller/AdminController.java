@@ -6,17 +6,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
     private final UserService userService;
+    private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AdminController(UserService userService, PasswordEncoder passwordEncoder) {
+    public AdminController(UserService userService, RoleService roleService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -26,11 +29,12 @@ public class AdminController {
         return "admin";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/new-user")
     public String addUser(Model model) {
         User user = new User();
+        model.addAttribute("roles", roleService.getAllRoles());
         model.addAttribute("user", user);
-        return "user-edit";
+        return "user-add";
     }
 
     @GetMapping("/edit")
@@ -40,14 +44,15 @@ public class AdminController {
         return "user-edit";
     }
 
+    @PostMapping("/add")
+    public String addUser(@ModelAttribute("user") User user) {
+        userService.addUser(user);
+        return "redirect:/admin";
+    }
     @RequestMapping("/save")
     public String saveUser(@ModelAttribute("user") User user) {
 
-        if (user.getId() != 0) {
             userService.updateUser(user);
-        } else {
-            userService.addUser(user);
-        }
         return "redirect:/admin";
     }
 
@@ -57,35 +62,35 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/role/removeAdminRole")
-    public String removeAdminRole(@RequestParam(value = "id", required = true) Long id, Model model) {
-        userService.removeRoleByUserId(id, "ROLE_ADMIN");
-        User user = userService.getUserById(id);
-        model.addAttribute("user", user);
-        return "user-edit";
-    }
-
-    @GetMapping("/role/removeUserRole")
-    public String removeUserRole(@RequestParam(value = "id", required = true) Long id, Model model) {
-        userService.removeRoleByUserId(id, "ROLE_USER");
-        User user = userService.getUserById(id);
-        model.addAttribute("user", user);
-        return "user-edit";
-    }
-
-    @GetMapping("/role/addAdminRole")
-    public String addAdminRole(@RequestParam(value = "id", required = true) Long id, Model model) {
-        userService.addRoleByUserId(id, "ROLE_ADMIN");
-        User user = userService.getUserById(id);
-        model.addAttribute("user", user);
-        return "user-edit";
-    }
-
-    @GetMapping("/role/addUserRole")
-    public String addUserRole(@RequestParam(value = "id", required = true) Long id, Model model) {
-        userService.addRoleByUserId(id, "ROLE_USER");
-        User user = userService.getUserById(id);
-        model.addAttribute("user", user);
-        return "user-edit";
-    }
+//    @GetMapping("/role/removeAdminRole")
+//    public String removeAdminRole(@RequestParam(value = "id", required = true) Long id, Model model) {
+//        userService.removeRoleByUserId(id, "ROLE_ADMIN");
+//        User user = userService.getUserById(id);
+//        model.addAttribute("user", user);
+//        return "user-edit";
+//    }
+//
+//    @GetMapping("/role/removeUserRole")
+//    public String removeUserRole(@RequestParam(value = "id", required = true) Long id, Model model) {
+//        userService.removeRoleByUserId(id, "ROLE_USER");
+//        User user = userService.getUserById(id);
+//        model.addAttribute("user", user);
+//        return "user-edit";
+//    }
+//
+//    @GetMapping("/role/addAdminRole")
+//    public String addAdminRole(@RequestParam(value = "id", required = true) Long id, Model model) {
+//        userService.addRoleByUserId(id, "ROLE_ADMIN");
+//        User user = userService.getUserById(id);
+//        model.addAttribute("user", user);
+//        return "user-edit";
+//    }
+//
+//    @GetMapping("/role/addUserRole")
+//    public String addUserRole(@RequestParam(value = "id", required = true) Long id, Model model) {
+//        userService.addRoleByUserId(id, "ROLE_USER");
+//        User user = userService.getUserById(id);
+//        model.addAttribute("user", user);
+//        return "user-edit";
+//    }
 }

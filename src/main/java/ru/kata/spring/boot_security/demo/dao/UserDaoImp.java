@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.dao;
 import javax.persistence.*;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import java.util.List;
@@ -19,9 +20,10 @@ public class UserDaoImp implements UserDao {
         return query.getResultList();
     }
 
+//    @Transactional
     @Override
-    public void addUser(User user) {
-        entityManager.persist(user);
+    public void save(User user) {
+        entityManager.merge(user);
     }
 
     @Override

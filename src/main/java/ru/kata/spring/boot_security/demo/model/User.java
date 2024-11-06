@@ -2,14 +2,13 @@ package ru.kata.spring.boot_security.demo.model;
 
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table
@@ -18,10 +17,10 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column
@@ -36,8 +35,10 @@ public class User implements UserDetails {
     @Column
     private int age;
 
-    @OneToMany(mappedBy = "user")
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinTable(name="user_role",
+            joinColumns=  @JoinColumn(name="user_id", referencedColumnName="id"),
+            inverseJoinColumns= @JoinColumn(name="role_id", referencedColumnName="id") )
     private Set<Role> roles;
 
     public Set<Role> getRoles() {

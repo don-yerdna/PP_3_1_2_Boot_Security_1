@@ -1,12 +1,14 @@
 package ru.kata.spring.boot_security.demo.dao;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.Role;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.List;
 
 @Repository
 public class RoleDaoImp implements RoleDao {
@@ -14,8 +16,15 @@ public class RoleDaoImp implements RoleDao {
     private EntityManager entityManager;
 
     @Override
-    public void addRole(Role role) {
-        entityManager.persist(role);
+    public List<Role> getAllRoles() {
+        Query query = entityManager.createQuery("from Role");
+        return query.getResultList();
+    }
+
+    //    @Transactional
+    @Override
+    public void save(Role role) {
+        entityManager.merge(role);
     }
 
     @Override

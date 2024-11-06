@@ -19,21 +19,19 @@ import java.util.Set;
 @Service
 public class UserServiceImp implements UserService {
 
-    private final UserDao userDAO;
-    private final RoleDao roleDao;
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final UserDao userDao;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImp(UserDao userDAO, RoleDao roleDao) {
-        this.userDAO = userDAO;
-        this.roleDao = roleDao;
-
+    public UserServiceImp(UserDao userDao,  PasswordEncoder passwordEncoder) {
+        this.userDao = userDao;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<User> getAllUsers() {
-        return userDAO.getAllUsers();
+        return userDao.getAllUsers();
     }
 
     @Transactional
@@ -42,89 +40,67 @@ public class UserServiceImp implements UserService {
         if (!user.getPassword().equals("")) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         } else {
-            user.setPassword(userDAO.getUserById(user.getId()).getPassword());
+            user.setPassword(userDao.getUserById(user.getId()).getPassword());
         }
-        userDAO.updateUser(user);
+        userDao.updateUser(user);
     }
 
     @Transactional
     @Override
     public void addUser(User user) {
-        Set<Role> roles = new HashSet<>();
-        Role role = new Role();
-        role.setRole("ROLE_USER");
-        role.setUser(user);
-        roles.add(role);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(roles);
-        roleDao.addRole(role);
-        userDAO.addUser(user);
+        userDao.save(user);
     }
 
     @Transactional(readOnly = true)
     @Override
     public User getUserById(Long id) {
-        return userDAO.getUserById(id);
+        return userDao.getUserById(id);
     }
 
     @Transactional
     @Override
     public void removeUserById(Long id) {
-        User user = userDAO.getUserById(id);
-        Set<Role> roles = user.getRoles();
-        for (Role role : roles) {
-            roleDao.deleteRole(role.getRole(), id);
-        }
-        userDAO.removeUserById(id);
+        userDao.removeUserById(id);
     }
 
-    @Transactional
-    @Override
-    public void removeRoleByUserId(Long id, String userRole) {
-        User user = userDAO.getUserById(id);
-        Set<Role> roles = user.getRoles();
-        for (Role role : roles) {
-            if (role.getRole().equals(userRole)) {
-                roles.remove(role);
-                roleDao.deleteRole(role.getRole(), id);
-                break;
-            }
-        }
-        user.setRoles(roles);
+//    @Transactional
+//    @Override
+//    public void removeRoleByUserId(Long id, String userRole) {
+//        User user = userDao.getUserById(id);
+//        Set<Role> roles = user.getRoles();
+//        for (Role role : roles) {
+//            if (role.getRole().equals(userRole)) {
+//                roles.remove(role);
+//                roleDao.deleteRole(role.getRole(), id);
+//                break;
+//            }
+//        }
+//        user.setRoles(roles);
+//
+//        userDao.updateUser(user);
+//
+//
+//    }
 
-        userDAO.updateUser(user);
+//    @Transactional
+//    @Override
+//    public void addRoleByUserId(Long id, String userRole) {
+//        User user = userDao.getUserById(id);
+//        Set<Role> roles = user.getRoles();
+//        for (Role role : roles) {
+//            if (role.getRole().equals(userRole)) {
+//                return;
+//            }
+//        }
+//        Role role = new Role();
+//        role.setRole(userRole);
+////        role.setUser(user);
+//        roles.add(role);
+//        user.setRoles(roles);
+//        roleDao.save(role);
+//        userDao.updateUser(user);
+//    }
 
-
-    }
-
-    @Transactional
-    @Override
-    public void addRoleByUserId(Long id, String userRole) {
-        User user = userDAO.getUserById(id);
-        Set<Role> roles = user.getRoles();
-        for (Role role : roles) {
-            if (role.getRole().equals(userRole)) {
-                return;
-            }
-        }
-        Role role = new Role();
-        role.setRole(userRole);
-        role.setUser(user);
-        roles.add(role);
-        user.setRoles(roles);
-        roleDao.addRole(role);
-        userDAO.updateUser(user);
-    }
-
-    @Transactional
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDAO.findUserByUsername(username);
-        System.out.println(user);
-        if (user != null) {
-            return user;
-        }
-        throw new UsernameNotFoundException("Username not found");
-    }
 
 }
