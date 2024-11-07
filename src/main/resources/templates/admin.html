@@ -29,22 +29,25 @@
             <td th:utext="${user.getEmail()}">VALUE</td>
             <td th:utext="${user.getAge()}">VALUE</td>
             <td th:utext="${user.getUsername()}">VALUE</td>
-            <td >
-                    <ul>
-                        <li th:each="role: ${user.getRoles()}" th:text="${role.getRole()}"></li>
-                    </ul>
+            <td>
+                <ul>
+                    <li th:each="role: ${user.getRoles()}" th:text="${role.getRole()}"></li>
+                </ul>
 
             </td>
             <td>
-                <input th:attr="onclick='window.location.href = \'' + @{/admin/edit?id={id}(id=${user.getId()})} + '\''" type="button" value="Редактировать" >
+                <input th:attr="onclick='window.location.href = \'' + @{/admin/edit?id={id}(id=${user.getId()})} + '\''"
+                       type="button" value="Редактировать">
 
-                <input th:attr="onclick='window.location.href = \'' + @{/admin/remove?id={id}(id=${user.getId()})} + '\''" type="button" value="Удалить" >
+                <input th:attr="onclick='window.location.href = \'' + @{/admin/remove?id={id}(id=${user.getId()})} + '\''"
+                       type="button" value="Удалить">
             </td>
         </tr>
 
     </table>
-   <br>
+    <br>
     <input type="button" value="Добавить" onclick="window.location.href='/admin/new-user'">
+    <br>
     <br>
     <input type="button" value="Logout" onclick="window.location.href='/logout'">
 </div>

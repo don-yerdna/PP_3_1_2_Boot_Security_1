@@ -32,10 +32,10 @@ public class User implements UserDetails {
     @Column
     private int age;
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinTable(name="user_role",
-            joinColumns=  @JoinColumn(name="user_id", referencedColumnName="id"),
-            inverseJoinColumns= @JoinColumn(name="role_id", referencedColumnName="id") )
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles;
 
     public Set<Role> getRoles() {

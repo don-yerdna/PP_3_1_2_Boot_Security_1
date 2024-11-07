@@ -8,17 +8,18 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
 public class UserServiceImp implements UserService {
 
-    private final UserRepository userRepository ;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImp(UserRepository userRepository,PasswordEncoder passwordEncoder) {
+    public UserServiceImp(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -32,12 +33,10 @@ public class UserServiceImp implements UserService {
     @Transactional
     @Override
     public void updateUser(User user) {
-//        if (!user.getPassword().equals("")) {
-//            user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        } else {
-//            user.setPassword(userRepository.findById(user.getId())
-//                    userDao.getUserById(user.getId()).getPassword());
-//        }
+        User oldUser = getUserById(user.getId());
+        if (!user.getPassword().equals(oldUser.getPassword())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         userRepository.save(user);
     }
 
@@ -50,7 +49,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found"));
     }
 
     @Transactional
@@ -58,44 +57,5 @@ public class UserServiceImp implements UserService {
     public void removeUserById(Long id) {
         userRepository.deleteById(id);
     }
-
-//    @Transactional
-//    @Override
-//    public void removeRoleByUserId(Long id, String userRole) {
-//        User user = userDao.getUserById(id);
-//        Set<Role> roles = user.getRoles();
-//        for (Role role : roles) {
-//            if (role.getRole().equals(userRole)) {
-//                roles.remove(role);
-//                roleDao.deleteRole(role.getRole(), id);
-//                break;
-//            }
-//        }
-//        user.setRoles(roles);
-//
-//        userDao.updateUser(user);
-//
-//
-//    }
-
-//    @Transactional
-//    @Override
-//    public void addRoleByUserId(Long id, String userRole) {
-//        User user = userDao.getUserById(id);
-//        Set<Role> roles = user.getRoles();
-//        for (Role role : roles) {
-//            if (role.getRole().equals(userRole)) {
-//                return;
-//            }
-//        }
-//        Role role = new Role();
-//        role.setRole(userRole);
-////        role.setUser(user);
-//        roles.add(role);
-//        user.setRoles(roles);
-//        roleDao.save(role);
-//        userDao.updateUser(user);
-//    }
-
 
 }

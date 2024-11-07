@@ -12,7 +12,7 @@
         <div><input class="create-user-input" name="username" type="text" th:value="${user.getUsername()}"></div>
         <br>
         <div class="user-label"><label>Password</label></div>
-        <div><input class="create-user-input" name="password" type="password"></div>
+        <div><input class="create-user-input" name="password" type="password" th:value="${user.getPassword()}"></div>
         <br>
         <div class="user-label"><label>Имя</label></div>
         <div><input class="create-user-input" name="firstName" type="text" th:value="${user.getFirstName()}"></div>
@@ -26,45 +26,17 @@
         <div class="user-label"><label>Возраст</label></div>
         <div><input class="create-user-input" name="age" type="text" th:value="${user.getAge()}"></div>
         <br>
-        <table border="1" th:if="${user.getRoles()!=null}">
-            <tr>
-                <th>Роль</th>
-                <th></th>
-            </tr>
-
-            <tr th:each="role :${user.getRoles()}">
-                <td th:utext="${role.getRole()}">VALUE</td>
-                <td>
-                    <p th:if="${role.getRole()}=='ROLE_ADMIN'">
-                        <input th:attr="onclick='window.location.href = \'' + @{/admin/role/removeAdminRole?id={id}(id=${user.getId()})} + '\''"
-                               type="button" value="Удалить">
-
-                    </p>
-                    <p th:if="${role.getRole()}=='ROLE_USER'">
-                        <input th:attr="onclick='window.location.href = \'' + @{/admin/role/removeUserRole?id={id}(id=${user.getId()})} + '\''"
-                               type="button" value="Удалить">
-                    </p>
-                </td>
-            </tr>
-
-        </table>
-
-        <div th:if="${user.getRoles().size<2}" th:each="role :${user.getRoles()}">
-            <input th:unless="${role.getRole()}=='ROLE_ADMIN'"
-                   th:attr="onclick='window.location.href = \'' + @{/admin/role/addAdminRole?id={id}(id=${user.getId()})} + '\''"
-                   type="button" value="Добавить роль ADMIN">
-            <input th:unless="${role.getRole()}=='ROLE_USER'"
-                   th:attr="onclick='window.location.href = \'' + @{/admin/role/addUserRole?id={id}(id=${user.getId()})} + '\''"
-                   type="button" value="Добавить роль USER">
-        </div>
-
+        <label >Roles:</label>
+        <select name="roles" th:value="user.roles" multiple>
+            <option th:each="role : ${allroles}"
+                    th:value="${role.id}"
+                    th:text="${role.role}"
+                    th:selected="${user.roles.contains(role)}"></option>
+        </select>
         <input name="id" type="hidden" th:value="${user.getId()}">
         <br>
-
         <input class="create-user-form-button" type="submit" value="Применить"/>
     </form>
-
 </div>
-
 </body>
 </html>

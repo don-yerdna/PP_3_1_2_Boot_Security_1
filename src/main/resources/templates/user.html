@@ -1,16 +1,13 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Spring Security Example</title>
+    <title>Страница пользователя</title>
 </head>
 <body>
-<h1>User, welcome spring boot security page!</h1>
+<h1>Добро пожаловать!</h1>
 <input type="button" value="Инфо" onclick="window.location.href='/user/info'">
 <br>
-<!--<br>-->
-<!--<div sec:authorize="hasAuthority('ADMIN')">-->
-<!--    <input  type="button" value="Admin" onclick="window.location.href='/admin'">-->
-<!--</div>-->
+
 <br>
 <input type="button" value="Logout" onclick="window.location.href='/logout'">
 
