@@ -29,8 +29,8 @@ public class InitApp {
         User admin = new User();
         admin.setUsername("admin");
         admin.setPassword("admin");
-        admin.setFirstName("admin");
-        admin.setLastName("admin");
+        admin.setFirstname("admin");
+        admin.setLastname("admin");
         admin.setEmail("admin@admin.com");
         admin.setAge(22);
         admin.setRoles(Set.of(roleAdmin));
@@ -38,8 +38,8 @@ public class InitApp {
         User user = new User();
         user.setUsername("user");
         user.setPassword("password");
-        user.setFirstName("user");
-        user.setLastName("user");
+        user.setFirstname("user");
+        user.setLastname("user");
         user.setEmail("user@user.com");
         user.setAge(22);
         user.setRoles(Set.of(roleUser));

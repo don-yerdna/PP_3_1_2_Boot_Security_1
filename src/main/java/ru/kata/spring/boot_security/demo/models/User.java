@@ -21,10 +21,10 @@ public class User implements UserDetails {
     private String password;
 
     @Column
-    private String firstName;
+    private String firstname;
 
     @Column
-    private String lastName;
+    private String lastname;
 
     @Column
     private String email;
@@ -97,20 +97,20 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getEmail() {
@@ -148,8 +148,8 @@ public class User implements UserDetails {
         return "User{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstname + '\'' +
+                ", lastName='" + lastname + '\'' +
                 ", email='" + email + '\'' +
                 ", age=" + age +
                 ", roles=" + roles +
