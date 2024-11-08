@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user")
 public class UserController {
 
-    @GetMapping("/info")
-    public String infoUser(Model model) {
+    @GetMapping
+    public String getUser(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("user", authentication.getPrincipal());
         return "user-info";
